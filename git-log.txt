@@ -1,0 +1,11 @@
+commit 735aee5aa15b4acadcf79923495a1888f7f02e22
+Author: FadiAlAriqi <f.ariqi.x@gmail.com>
+Date:   Tue Jan 28 07:38:33 2025 +0100
+
+    Initialize the app
+
+commit 5aba6d5be33c1b631ff4da8ac858a9e1d29b1968
+Author: Muhammad Nouman <nomi9639@gmail.com>
+Date:   Mon Jul 8 17:36:10 2024 +0500
+
+    Remove Actual QTY
