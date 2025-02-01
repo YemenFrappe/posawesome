@@ -626,6 +626,7 @@ def submit_invoice(invoice, data):
     frappe.flags.ignore_account_permission = True
     invoice_doc.posa_is_printed = 1
     invoice_doc.save()
+    invoice_doc.submit()
 
     if data.get("due_date"):
         frappe.db.set_value(
@@ -1228,20 +1229,51 @@ def set_customer_info(customer, fieldname, value=""):
         )
 
 
+# @frappe.whitelist()
+# def search_invoices_for_return(invoice_name, company):
+    # invoices_list = frappe.get_list(
+    #     "Sales Invoice",
+    #     filters={
+    #         "name": ["like", f"%{invoice_name}%"],
+    #         "customer": ["like", f"%{invoice_name}%"],
+    #         "company": company,
+    #         "docstatus": 1,
+    #         "is_return": 0,
+    #     },
+    #     fields=["name"],
+    #     limit_page_length=0,
+    #     order_by="customer",
+    # )
+    # data = []
+    # is_returned = frappe.get_all(
+    #     "Sales Invoice",
+    #     filters={"return_against": invoice_name, "docstatus": 1},
+    #     fields=["name"],
+    #     order_by="customer",
+    # )
+    # if len(is_returned):
+    #     return data
+    # for invoice in invoices_list:
+    #     data.append(frappe.get_doc("Sales Invoice", invoice["name"]))
+    # return data
+
 @frappe.whitelist()
 def search_invoices_for_return(invoice_name, company):
-    invoices_list = frappe.get_list(
-        "Sales Invoice",
-        filters={
-            "name": ["like", f"%{invoice_name}%"],
-            "company": company,
-            "docstatus": 1,
-            "is_return": 0,
-        },
-        fields=["name"],
-        limit_page_length=0,
-        order_by="customer",
+    query = """
+        SELECT name 
+        FROM `tabSales Invoice`
+        WHERE (name LIKE %(invoice_name)s OR customer LIKE %(invoice_name)s)
+        AND company = %(company)s
+        AND docstatus = 1
+        AND is_return = 0
+        ORDER BY customer
+    """
+    invoices_list = frappe.db.sql(
+        query,
+        {"invoice_name": f"%{invoice_name}%", "company": company},
+        as_dict=True
     )
+
     data = []
     is_returned = frappe.get_all(
         "Sales Invoice",
@@ -1251,8 +1283,10 @@ def search_invoices_for_return(invoice_name, company):
     )
     if len(is_returned):
         return data
+
     for invoice in invoices_list:
         data.append(frappe.get_doc("Sales Invoice", invoice["name"]))
+
     return data
 
 

@@ -8,42 +8,63 @@
         <v-container>
           <v-row class="mb-4">
             <v-text-field
-              color="primary"
-              :label="__('Invoice ID')"
-              background-color="white"
+              @keyup.enter="search_invoices"
+              :label="__('Enter Invoice ID or Customer Name')"
               hide-details
               v-model="invoice_name"
               dense
               clearable
               class="mx-4"
+              style="background-color: #fff; border: 1px soled #000;"
             ></v-text-field>
-            <v-btn text class="ml-2" color="primary" dark @click="search_invoices">
+            <v-btn text class="mt-1 mr-2" @click="search_invoices" style="background-color: #000; color: #fff;">
               {{ __('Search') }}
             </v-btn>
           </v-row>
           <v-row>
             <v-col cols="12" class="pa-1" v-if="dialog_data">
+
               <v-data-table
                 :headers="headers"
                 :items="dialog_data"
                 item-value="name"
                 class="elevation-1"
-                show-select
-                v-model="selected"
               >
                 <template v-slot:[`item.grand_total`]="{ item }">
                   {{ currencySymbol(item.currency) }} {{ formtCurrency(item.grand_total) }}
                 </template>
+
+                <template v-slot:item.return="{ item }">
+                  <v-btn
+                    title="Return"
+                    icon
+                    @click="submit_dialog(item)"
+                    style="width: 30px; height: 30px; background-color: #fff; margin-top: 5px;  margin-right: 20px;"
+                  >
+                    <v-icon style="font-size: 30px; color: #000;">mdi-refresh</v-icon>
+                  </v-btn>
+                </template>
+
+
+                <template v-slot:item.print="{ item }">
+                  <v-btn
+                    title="Print"
+                    icon
+                    @click="load_print_page(item)"
+                    style="width: 30px; height: 30px; background-color: #fff; margin-top: 5px;  margin-right: 20px;"
+                  >
+                    <v-icon style="font-size: 30px; color: #000;">mdi-printer</v-icon>
+                  </v-btn>
+                </template>
+
+                
               </v-data-table>
             </v-col>
           </v-row>
         </v-container>
         <v-card-actions class="mt-4">
           <v-spacer></v-spacer>
-          <v-btn color="error mx-2" dark @click="close_dialog">Close</v-btn>
-          <v-btn color="success" dark @click="submit_dialog">
-            {{ __('Select') }}
-          </v-btn>
+          <v-btn color="error mx-2" dark @click="close_dialog" style="padding: 10px;">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -63,6 +84,8 @@ export default {
     company: '',
     invoice_name: '',
     headers: [
+      { title: __("Return"), key: "return", align: "center" },
+      { title: __("Print"), key: "print", align: "center" },
       {
         title: __('Customer'),
         key: 'customer',
@@ -115,39 +138,60 @@ export default {
         },
       });
     },
-    submit_dialog() {
-      var me = this;
-      if (this.selected.length == 1) {
-         $.each(this.dialog_data || [], function(i,v){
-          if(v.name == me.selected[0]){
-            const return_doc = v;
-            const invoice_doc = {};
-            const items = [];
-            return_doc.items.forEach((item) => {
-              const new_item = { ...item };
-              new_item.qty = item.qty * -1;
-              new_item.stock_qty = item.stock_qty * -1;
-              new_item.amount = item.amount * -1;
-              items.push(new_item);
-            });
-            invoice_doc.items = items;
-            invoice_doc.is_return = 1;
-            invoice_doc.return_against = return_doc.name;
-            invoice_doc.customer = return_doc.customer;
-            const data = { invoice_doc, return_doc };
-            evntBus.emit('load_return_invoice', data);
-            me.invoicesDialog = false;
-          }
-        });
-      }
-      else{
-        evntBus.emit("show_mesage", {
-          text: `Select Only 1 Row`,
-          color: "error",
-        });
-      }
-    },
+
+    submit_dialog(item) {
+      const return_doc = item; 
+      const invoice_doc = {};
+      const items = [];
+
+      return_doc.items.forEach((item) => {
+          const new_item = { ...item };
+          new_item.qty = item.qty * -1;
+          new_item.stock_qty = item.stock_qty * -1;
+          new_item.amount = item.amount * -1;
+          items.push(new_item);
+      });
+
+      invoice_doc.items = items;
+      invoice_doc.is_return = 1;
+      invoice_doc.return_against = return_doc.name;
+      invoice_doc.customer = return_doc.customer;
+
+      const data = { invoice_doc, return_doc };
+
+      evntBus.emit('load_return_invoice', data);
+
+      this.invoicesDialog = false;
   },
+
+  load_print_page(item) {
+    // console.log("Print Items :" , item)
+    const print_format = item.print_format || "Standard";
+    const letter_head = item.letter_head || 0;
+    const url =
+      frappe.urllib.get_base_url() +
+      "/printview?doctype=Sales%20Invoice&name=" +
+      item.name + 
+      "&trigger_print=1" +
+      "&format=" +
+      print_format +
+      "&no_letterhead=" +
+      letter_head;
+
+    const printWindow = window.open(url, "Print");
+    printWindow.addEventListener(
+      "load",
+      function () {
+        printWindow.print();
+        // printWindow.close();
+      },
+      true
+    );
+  },
+
+
+  },
+
   created: function () {
     evntBus.on('open_returns', (data) => {
       this.invoicesDialog = true;
@@ -159,3 +203,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-btn--variant-elevated{
+  box-shadow: none;
+}
+.v-btn--size-default {
+  --v-btn-height: 0
+}
+.v-btn__underlay {
+  background-color: #000; color: #fff; padding: 5px 10px;
+}
+</style>

@@ -11,10 +11,10 @@
     <v-row v-show="!dialog">
       <v-col
         v-show="!payment && !offers && !coupons"
-        xl="7"
-        lg="7"
-        md="7"
-        sm="7"
+        xl="6"
+        lg="6"
+        md="6"
+        sm="6"
         cols="12"
         class="pos pr-0"
       >
@@ -22,10 +22,10 @@
       </v-col>
       <v-col
         v-show="offers"
-        xl="7"
-        lg="7"
-        md="7"
-        sm="7"
+        xl="6"
+        lg="6"
+        md="6"
+        sm="6"
         cols="12"
         class="pos pr-0"
       >
@@ -33,10 +33,10 @@
       </v-col>
       <v-col
         v-show="coupons"
-        xl="7"
-        lg="7"
-        md="7"
-        sm="7"
+        xl="6"
+        lg="6"
+        md="6"
+        sm="6"
         cols="12"
         class="pos pr-0"
       >
@@ -44,17 +44,17 @@
       </v-col>
       <v-col
         v-show="payment"
-        xl="7"
-        lg="7"
-        md="7"
-        sm="7"
+        xl="6"
+        lg="6"
+        md="6"
+        sm="6"
         cols="12"
         class="pos pr-0"
       >
         <Payments></Payments>
       </v-col>
 
-      <v-col xl="5" lg="5" md="5" sm="5" cols="12" class="pos">
+      <v-col xl="6" lg="6" md="6" sm="6" cols="12" class="pos">
         <Invoice></Invoice>
       </v-col>
     </v-row>

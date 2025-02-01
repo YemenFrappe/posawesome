@@ -1,102 +1,3 @@
-<!-- <template>
-  <div>
-    <v-autocomplete
-      density="compact"
-      variant="outlined"
-      color="primary"
-      :label="__('Customer')"
-      v-model="customer"
-      :items="customers"
-      item-title="customer_name"
-      item-value="name"
-      :filter="customFilter"
-      :disabled="readonly"
-      append-icon="mdi-plus"
-      @click:append="new_customer"
-      prepend-inner-icon="mdi-account-edit"
-      @click:prepend-inner="edit_customer"
-    >
-      <template v-slot:item="{ props, item }">
-          <v-list-item
-            v-bind="props"
-            >
-            <v-list-item-title
-              class="primary--text subtitle-1"
-              v-html="item.customer_name"
-            ></v-list-item-title>
-            <v-list-item-subtitle
-              v-if="item.customer_name != item.name"
-              v-html="`ID: ${item.name}`"
-            ></v-list-item-subtitle>
-            <v-list-item-subtitle
-              v-if="item.tax_id"
-              v-html="`TAX ID: ${item.tax_id}`"
-            ></v-list-item-subtitle>
-            <v-list-item-subtitle
-              v-if="item.email_id"
-              v-html="`Email: ${item.email_id}`"
-            ></v-list-item-subtitle>
-            <v-list-item-subtitle
-              v-if="item.mobile_no"
-              v-html="`Mobile No: ${item.mobile_no}`"
-            ></v-list-item-subtitle>
-            <v-list-item-subtitle
-              v-if="item.primary_address"
-              v-html="`Primary Address: ${item.primary_address}`"
-            ></v-list-item-subtitle>
-          </v-list-item>
-      </template>
-    </v-autocomplete>
-    <div class="mb-8">
-      <UpdateCustomer></UpdateCustomer>
-    </div>
-  </div>
-</template> -->
-
-
-
-<!-- <template>
-  <div>
-    <v-autocomplete
-      density="compact"
-      variant="outlined"
-      color="primary"
-      :label="__('Customer')"
-      v-model="customer"
-      :items="customers"
-      item-title="customer_name"
-      item-value="name"
-      :filter="customFilter"
-      :disabled="readonly"
-      append-icon="mdi-plus"
-      @click:append="new_customer"
-      prepend-inner-icon="mdi-account-edit"
-      @click:prepend-inner="edit_customer"
-    >
-      <template v-slot:item="{ props, item }">
-        <v-list-item v-bind="props">
-          <v-list-item-title class="primary--text subtitle-1">
-            {{ item.customer_name || item.name }}
-          </v-list-item-title>
-          <v-list-item-subtitle v-if="item.mobile_no">
-            Mobile: {{ item.mobile_no }}
-          </v-list-item-subtitle>
-          <v-list-item-subtitle v-if="item.email_id">
-            Email: {{ item.email_id }}
-          </v-list-item-subtitle>
-          <v-list-item-subtitle v-if="item.tax_id">
-            TAX ID: {{ item.tax_id }}
-          </v-list-item-subtitle>
-        </v-list-item>
-      </template>
-    </v-autocomplete>
-    <div class="mb-8">
-      <UpdateCustomer></UpdateCustomer>
-    </div>
-  </div>
-</template> -->
-
-
 <template>
   <div>
     <v-autocomplete
@@ -151,235 +52,15 @@ export default {
   },
 
   methods: {
-    // get_customer_names() {
-    //   const vm = this;
-    //   console.log("get_customer_names() called");
-
-    //   if (!this.pos_profile) {
-    //     console.error("pos_profile is not loaded.");
-    //     return;
-    //   }
-
-    //   // تعيين قيمة افتراضية لـ posa_local_storage إذا كانت غير معرّفة
-    //   if (this.pos_profile.posa_local_storage === undefined) {
-    //     console.log("posa_local_storage is not defined. Setting default value: false");
-    //     this.pos_profile.posa_local_storage = false;
-    //   }
-
-    //   if (this.customers.length > 0) {
-    //     console.log("Customers already loaded.");
-    //     return;
-    //   }
-
-    //   if (vm.pos_profile.posa_local_storage && localStorage.customer_storage) {
-    //     try {
-    //       vm.customers = JSON.parse(localStorage.getItem('customer_storage'));
-    //       console.log("Customers loaded from localStorage:", vm.customers);
-    //     } catch (error) {
-    //       console.error("Error parsing localStorage data:", error);
-    //     }
-    //   }
-
-    //   frappe.call({
-    //     method: 'posawesome.posawesome.api.posapp.get_customer_names',
-    //     args: {
-    //       pos_profile: this.pos_profile.pos_profile,
-    //     },
-    //     callback: function (r) {
-    //       if (r.message) {
-    //         vm.customers = r.message;
-    //         console.log("Customers loaded from server:", vm.customers);
-    //         if (vm.pos_profile.posa_local_storage) {
-    //           try {
-    //             localStorage.setItem('customer_storage', JSON.stringify(r.message));
-    //             console.log("Customers saved to localStorage.");
-    //           } catch (error) {
-    //             console.error("Error saving to localStorage:", error);
-    //           }
-    //         }
-    //       } else {
-    //         console.error("No data returned from server.");
-    //       }
-    //     },
-    //     error: function (err) {
-    //       console.error("Error fetching customers:", err);
-    //     }
-    //   });
-
-    //   console.log("Customers data:", this.customers);
-    // },
-
-//     get_customer_names() {
-//       const vm = this;
-//   console.log("get_customer_names() called");
-
-//   if (!this.pos_profile) {
-//     console.error("pos_profile is not loaded.");
-//     return;
-//   }
-
-//   // تعيين قيمة افتراضية لـ posa_local_storage إذا كانت غير معرّفة
-//   if (this.pos_profile.posa_local_storage === undefined) {
-//     console.log("posa_local_storage is not defined. Setting default value: false");
-//     this.pos_profile.posa_local_storage = false;
-//   }
-
-//   if (this.customers.length > 0) {
-//     console.log("Customers already loaded.");
-//     return;
-//   }
-
-//   if (vm.pos_profile.posa_local_storage && localStorage.customer_storage) {
-//     try {
-//       vm.customers = JSON.parse(localStorage.getItem('customer_storage'));
-//       console.log("Customers loaded from localStorage:", vm.customers);
-//     } catch (error) {
-//       console.error("Error parsing localStorage data:", error);
-//     }
-//   }
-
-//   frappe.call({
-//     method: 'posawesome.posawesome.api.posapp.get_customer_names',
-//     args: {
-//       pos_profile: this.pos_profile.pos_profile,
-//     },
-//     callback: function (r) {
-//       if (r.message) {
-//         vm.customers = r.message;
-//         console.log("Customers loaded from server:", vm.customers);
-//         if (vm.pos_profile.posa_local_storage) {
-//           try {
-//             localStorage.setItem('customer_storage', JSON.stringify(r.message));
-//             console.log("Customers saved to localStorage.");
-//           } catch (error) {
-//             console.error("Error saving to localStorage:", error);
-//           }
-//         }
-//       } else {
-//         console.error("No data returned from server.");
-//       }
-//     },
-//     error: function (err) {
-//       console.error("Error fetching customers:", err);
-//     }
-//   });
-
-//   console.log("pos_profile:", this.pos_profile);
-//   console.log(JSON.parse(localStorage.getItem('customer_storage')));
-//   console.log("Customers data:", vm.customers);
-// },
-
-
-
-
-
-
-
-async get_customer_names() {
-  // const vm = this;
-  console.log("get_customer_names() called");
-
-  if (!this.pos_profile) {
-    console.error("pos_profile is not loaded.");
-    return;
-  }
-
-  if (this.pos_profile.posa_local_storage === undefined) {
-    console.log("posa_local_storage is not defined. Setting default value: false");
-    this.pos_profile.posa_local_storage = false;
-  }
-
-  if (this.customers.length > 0) {
-    console.log("Customers already loaded.");
-    return;
-  }
-
-  if (this.pos_profile.posa_local_storage && localStorage.customer_storage) {
-    try {
-      this.customers = JSON.parse(localStorage.getItem('customer_storage'));
-      console.log("Customers loaded from localStorage:", this.customers);
-    } catch (error) {
-      console.error("Error parsing localStorage data:", error);
-    }
-  }
-
-  try {
-    const response = await frappe.call({
-      method: 'posawesome.posawesome.api.posapp.get_customer_names',
-      args: {
-        pos_profile: this.pos_profile.pos_profile,
-      },
-    });
-
-    if (response.message) {
-      this.customers = response.message;
-      this.customersnew = response.message;
-      console.log("Customers loaded from server:", this.customers);
-      if (this.pos_profile.posa_local_storage) {
-        try {
-          localStorage.setItem('customer_storage', JSON.stringify(response.message));
-          console.log("Customers saved to localStorage.");
-        } catch (error) {
-          console.error("Error saving to localStorage:", error);
-        }
-      }
-    } else {
-      console.error("No data returned from server.");
-    }
-  } catch (err) {
-    console.error("Error fetching customers:", err);
-  }
-
-  console.log("pos_profile:", this.pos_profile);
-  console.log(JSON.parse(localStorage.getItem('customer_storage')));
-  console.log("Customers data:", this.customers);
-  console.log("Customers data with This:", this.customers);
-},
-
-
-
-
-
-
-
-
-
-// async get_customer_names() {
-//   console.log("Fetching customer names...");
-//   try {
-//     const response = await frappe.call({
-//       method: 'posawesome.posawesome.api.posapp.get_customer_names',
-//       args: { pos_profile: this.pos_profile.pos_profile },
-//     });
-//     if (response.message) {
-//       this.customers = response.message;
-//       console.log("Customers loaded:", this.customers);
-//     } else {
-//       console.error("No customers returned from server.");
-//     }
-//   } catch (error) {
-//     console.error("Error fetching customer names:", error);
-//   }
-// },
-
-
-
-
-
-
-
-
-
+    
     // async get_customer_names() {
-    //   const vm = this;
-    //   console.log("get_customer_names() called");
+    //   // const vm = this;
 
     //   if (!this.pos_profile) {
     //     console.error("pos_profile is not loaded.");
     //     return;
     //   }
 
-    //   // تعيين قيمة افتراضية لـ posa_local_storage إذا كانت غير معرّفة
     //   if (this.pos_profile.posa_local_storage === undefined) {
     //     console.log("posa_local_storage is not defined. Setting default value: false");
     //     this.pos_profile.posa_local_storage = false;
@@ -390,10 +71,10 @@ async get_customer_names() {
     //     return;
     //   }
 
-    //   if (vm.pos_profile.posa_local_storage && localStorage.customer_storage) {
+    //   if (this.pos_profile.posa_local_storage && localStorage.customer_storage) {
     //     try {
-    //       vm.customers = JSON.parse(localStorage.getItem('customer_storage'));
-    //       console.log("Customers loaded from localStorage:", vm.customers);
+    //       this.customers = JSON.parse(localStorage.getItem('customer_storage'));
+    //       console.log("Customers loaded from localStorage:");
     //     } catch (error) {
     //       console.error("Error parsing localStorage data:", error);
     //     }
@@ -408,9 +89,10 @@ async get_customer_names() {
     //     });
 
     //     if (response.message) {
-    //       vm.customers = response.message;
-    //       console.log("Customers loaded from server:", vm.customers);
-    //       if (vm.pos_profile.posa_local_storage) {
+    //       this.customers = response.message;
+    //       this.customersnew = response.message;
+    //       // console.log("Customers loaded from server:", this.customers);
+    //       if (this.pos_profile.posa_local_storage) {
     //         try {
     //           localStorage.setItem('customer_storage', JSON.stringify(response.message));
     //           console.log("Customers saved to localStorage.");
@@ -425,11 +107,40 @@ async get_customer_names() {
     //     console.error("Error fetching customers:", err);
     //   }
 
-    //   console.log("pos_profile:", this.pos_profile);
-    //   console.log(JSON.parse(localStorage.getItem('customer_storage')));
-    //   console.log("Customers data:", vm.customers);
-    //   console.log("Customers data with This:", this.customers);
+    //   // console.log("pos_profile:", this.pos_profile);
+    //   // console.log(JSON.parse(localStorage.getItem('customer_storage')));
+    //   // console.log("Customers data:", this.customers);
+    //   // console.log("Customers data with This:", this.customers);
     // },
+
+    get_customer_names() {
+      const vm = this;
+      if (this.customers.length > 0) {
+        return;
+      }
+      if (vm.pos_profile.posa_local_storage && localStorage.customer_storage) {
+        vm.customers = JSON.parse(localStorage.getItem('customer_storage'));
+      }
+      frappe.call({
+        method: 'posawesome.posawesome.api.posapp.get_customer_names',
+        args: {
+          pos_profile: this.pos_profile.pos_profile,
+        },
+        callback: function (r) {
+          if (r.message) {
+            vm.customers = r.message;
+            console.info('loadCustomers');
+            if (vm.pos_profile.posa_local_storage) {
+              localStorage.setItem('customer_storage', '');
+              localStorage.setItem(
+                'customer_storage',
+                JSON.stringify(r.message)
+              );
+            }
+          }
+        },
+      });
+    },
 
     new_customer() {
       evntBus.emit('open_update_customer', null);
@@ -531,17 +242,17 @@ async get_customer_names() {
   });
 },
 
+  watch: {
+    customer() {
+      evntBus.emit('update_customer', this.customer);
+    },
+  },
+
   // watch: {
-  //   customer() {
-  //     evntBus.emit('update_customer', this.customer);
+  //   customers(newVal) {
+  //     console.log("Customers updated:", newVal);
   //   },
   // },
-
-  watch: {
-  customers(newVal) {
-    console.log("Customers updated:", newVal);
-  },
-},
 
 };
 </script>

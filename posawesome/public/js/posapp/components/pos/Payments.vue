@@ -850,6 +850,8 @@ export default {
       evntBus.emit("new_invoice", "false");
       this.back_to_invoice();
     },
+
+
     submit_invoice(print) {
       let totalPayedAmount = 0;
       this.invoice_doc.payments.forEach((payment) => {
@@ -922,6 +924,9 @@ export default {
         payment.amount = 0;
       });
     },
+
+
+
     load_print_page() {
       const print_format =
         this.pos_profile.print_format_for_online ||
@@ -947,6 +952,7 @@ export default {
         true
       );
     },
+    
     validate_due_date() {
       const today = frappe.datetime.now_date();
       const parse_today = Date.parse(today);

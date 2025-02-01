@@ -372,36 +372,42 @@ export default {
       mpesa_search_mobile: "",
       invoices_headers: [
         {
+          title: __("Invoice"),
           text: __("Invoice"),
           align: "start",
           sortable: true,
           value: "name",
         },
         {
+          title: __("Customer"),
           text: __("Customer"),
           align: "start",
           sortable: true,
           value: "customer_name",
         },
         {
+          title: __("Date"),
           text: __("Date"),
           align: "start",
           sortable: true,
           value: "posting_date",
         },
         {
+          title: __("Due Date"),
           text: __("Due Date"),
           align: "start",
           sortable: true,
           value: "due_date",
         },
         {
+          title: __("Total"),
           text: __("Total"),
           align: "end",
           sortable: true,
           value: "grand_total",
         },
         {
+          title: __("Outstanding"),
           text: __("Outstanding"),
           align: "end",
           sortable: true,
@@ -410,36 +416,42 @@ export default {
       ],
       unallocated_payments_headers: [
         {
+          title: __("Payment ID"),
           text: __("Payment ID"),
           align: "start",
           sortable: true,
           value: "name",
         },
         {
+          title: __("Customer"),
           text: __("Customer"),
           align: "start",
           sortable: true,
           value: "customer_name",
         },
         {
+          title: __("Date"),
           text: __("Date"),
           align: "start",
           sortable: true,
           value: "posting_date",
         },
         {
+          title: __("Mode"),
           text: __("Mode"),
           align: "start",
           sortable: true,
           value: "mode_of_payment",
         },
         {
+          title: __("Paid"),
           text: __("Paid"),
           align: "end",
           sortable: true,
           value: "paid_amount",
         },
         {
+          title: __("Unallocated"),
           text: __("Unallocated"),
           align: "end",
           sortable: true,
@@ -448,30 +460,35 @@ export default {
       ],
       mpesa_payment_headers: [
         {
+          title: __("Payment ID"),
           text: __("Payment ID"),
           align: "start",
           sortable: true,
           value: "transid",
         },
         {
+          title: __("Full Name"),
           text: __("Full Name"),
           align: "start",
           sortable: true,
           value: "full_name",
         },
         {
+          title: __("Nobile Number"),
           text: __("Nobile Number"),
           align: "start",
           sortable: true,
           value: "mobile_no",
         },
         {
+          title: __("Date"),
           text: __("Date"),
           align: "start",
           sortable: true,
           value: "posting_date",
         },
         {
+          title: __("Amount"),
           text: __("Amount"),
           align: "end",
           sortable: true,
@@ -559,6 +576,10 @@ export default {
       evntBus.emit("set_customer", event.item.customer);
     },
     get_outstanding_invoices() {
+      // console.log("customer_name" , this.customer_name);
+      // console.log("customer_name" , this.customer_name);
+      console.log("customer_name" , this.customer_name);
+      console.log("customer_name" , this.customer_info);
       this.invoices_loading = true;
       return frappe
         .call(

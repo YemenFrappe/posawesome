@@ -25,19 +25,19 @@
       <v-row align="center" class="items px-2 py-1">
         <v-col
           v-if="pos_profile.posa_allow_sales_order"
-          cols="9"
-          class="pb-2 pr-0 mt-4"
+          cols="8.5"
+          class="pb-2 pr-0 mt-7 ml-3"
         >
           <Customer></Customer>
         </v-col>
         <v-col
           v-if="!pos_profile.posa_allow_sales_order"
           cols="12"
-          class="pb-2"
+          class="pb-2 "
         >
           <Customer></Customer>
         </v-col>
-        <v-col v-if="pos_profile.posa_allow_sales_order" cols="3" class="mt-4">
+        <v-col v-if="pos_profile.posa_allow_sales_order" cols="3" class="mt-4 ">
           <!-- <v-select
             dense
             hide-details
@@ -60,6 +60,7 @@
             :label="__('Type')"
             v-model="invoiceType"
             :disabled="invoiceType == 'Return'"
+            style="margin-right: 10px;"
           >
           </v-autocomplete>
         </v-col>
@@ -202,39 +203,39 @@
             </template> -->
 
             <template v-slot:item.edit_quantity="{ item }">
-              <v-row >
-                  <v-col cols="6">
+              <!-- <v-row class="ml-1">
+                  <v-col cols="6"> -->
                     <v-btn
                       :disabled="!!item.posa_is_offer || !!item.posa_is_replace"
                       icon
-                      color="secondary"
                       @click.stop="subtract_one(item)"
+                      style="width: 30px; height: 30px; background-color: #ffffff; margin-top: 5px; margin-right: 20px;" 
                     >
-                      <v-icon>mdi-minus-circle-outline</v-icon>
+                      <v-icon style="font-size: 30px; color: #48A9A6;">mdi-minus-circle-outline</v-icon>
                     </v-btn>
-                  </v-col>
+                  <!-- </v-col>
                   
-                  <v-col cols="6">
+                  <v-col cols="6"> -->
                     <v-btn
                       :disabled="!!item.posa_is_offer || !!item.posa_is_replace"
                       icon
-                      color="secondary"
                       @click.stop="add_one(item)"
+                      style="width: 30px; height: 30px; background-color: #ffffff; margin-top: 5px;  margin-right: 20px;" 
                     >
-                      <v-icon>mdi-plus-circle-outline</v-icon>
+                      <v-icon style="font-size: 30px; color: #48A9A6;">mdi-plus-circle-outline</v-icon>
                     </v-btn>
-                  </v-col>
-                </v-row>
+                  <!-- </v-col>
+                </v-row> -->
             </template>
 
             <template v-slot:item.delete="{ item }">
               <v-btn
                 :disabled="!!item.posa_is_offer || !!item.posa_is_replace"
                 icon
-                color="error"
                 @click.stop="remove_item(item)"
+                style="width: 30px; height: 30px; background-color: red; margin-top: 5px;  margin-right: 20px;"
               >
-                <v-icon>mdi-delete</v-icon>
+                <v-icon style="font-size: 30px; color: #fff;">mdi-delete</v-icon>
               </v-btn>
             </template>
 
@@ -933,133 +934,103 @@
       </v-menu>
     </v-col>
   </v-row> -->
-  <v-row no-gutters class="pa-1 pt-9 pl-0">
-    <!-- زر الدفع (PAY) -->
-    <v-col cols="12" class="pa-1">
+  <v-row no-gutters class="pa-1 pt-10 pl-0">
+    <!-- PAY Button-->
+    <v-col cols="12" class="pa-0">
       <v-btn
         block
         class="pa-0"
-        color="success"
+        color="info"
         @click="show_payment"
         variant="flat"
+         style="height: 56px; font-size: 20px; margin-bottom: 16px"
       >
         {{ __("PAY") }}
       </v-btn>
     </v-col>
 
-    <!-- زر Action مع القائمة المنسدلة -->
-    <!-- <v-col cols="12" class="pa-1 pt-5">
-      <v-menu
-        v-model="actionMenuVisible"
-        offset-y
-        close-on-content-click
-        activator="parent"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            block
-            class="pa-0"
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            {{ __("Action") }}
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item @click="get_draft_invoices">{{ __("Held") }}</v-list-item>
-          <v-list-item
-            v-if="pos_profile.custom_allow_select_sales_order === 1"
-            @click="get_draft_orders"
-          >
-            {{ __("Select S.O") }}
-          </v-list-item>
-          <v-list-item
-            :class="{ 'disable-events': !pos_profile.posa_allow_return }"
-            @click="open_returns"
-          >
-            {{ __("Return") }}
-          </v-list-item>
-          <v-list-item @click="cancel_dialog = true">
-            {{ __("Cancel") }}
-          </v-list-item>
-          <v-list-item @click="new_invoice">{{ __("Save/New") }}</v-list-item>
-          <v-list-item
-            v-if="pos_profile.posa_allow_print_draft_invoices"
-            @click="print_draft_invoice"
-          >
-            {{ __("Print Draft") }}
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-col> -->
-    <v-col cols="12" class="pa-1 pt-5">
-    <!-- Popup -->
-    <v-dialog
-      v-model="actionMenuVisible"
-      max-width="400px"
+    <v-col cols="12" class="pa-0">
+  
+    <v-btn
+      block
+      class="pa-0 btn-hover"
+      color="primary"
+      dark
+      @click="actionDialogVisible = true"
+      style="height: 56px; font-size: 20px; margin-top: 0;background-color: black !important; box-shadow: none;"
     >
-      <!-- زر التفعيل -->
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          block
-          class="pa-0"
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          {{ __("Action") }}
-        </v-btn>
-      </template>
+      {{ __("Action") }}
+    </v-btn>
 
-      <!-- محتوى الـ Popup -->
+    <!--   Dialog Window-->
+    <v-dialog v-model="actionDialogVisible" max-width="600px">
       <v-card>
-        <v-card-title>
-          {{ __("Actions") }}
-        </v-card-title>
+        <v-card-title class="text-h6">{{ __("Actions") }}</v-card-title>
         <v-card-text>
-          <!-- قائمة الأزرار -->
-          <v-list>
-            <v-list-item @click="get_draft_invoices">
-              {{ __("Held") }}
-            </v-list-item>
-            <v-list-item
-              v-if="pos_profile.custom_allow_select_sales_order === 1"
-              @click="get_draft_orders"
-            >
-              {{ __("Select S.O") }}
-            </v-list-item>
-            <v-list-item
-              :class="{ 'disable-events': !pos_profile.posa_allow_return }"
-              @click="open_returns"
-            >
-              {{ __("Return") }}
-            </v-list-item>
-            <v-list-item @click="cancel_dialog = true">
-              {{ __("Cancel") }}
-            </v-list-item>
-            <v-list-item @click="new_invoice">
-              {{ __("Save/New") }}
-            </v-list-item>
-            <v-list-item
-              v-if="pos_profile.posa_allow_print_draft_invoices"
-              @click="print_draft_invoice"
-            >
-              {{ __("Print Draft") }}
-            </v-list-item>
-          </v-list>
+          <!-- <v-container> -->
+            <!-- الصف الأول من الأزرار -->
+            <v-row style="margin: 1px;">
+              <v-col cols="6">
+                <v-btn
+                  block
+                  large
+                  class="dialog-btn"
+                  @click="get_draft_invoices"
+                  style="margin: 1px;"
+                >
+                  {{ __("Held") }}
+                </v-btn>
+              </v-col>
+              <v-col cols="6">
+                <v-btn
+                  block
+                  large
+                  class="dialog-btn"
+                  :disabled="!actionsData.allowSelectSalesOrder"
+                  @click="get_draft_orders"
+                  style="margin: 1px;"
+                >
+                  {{ __("Select S.O") }}
+                </v-btn>
+              </v-col>
+            </v-row>
+            <!-- الصف الثاني من الأزرار -->
+            <v-row style="margin: 1px;">
+              <v-col cols="6">
+                <v-btn
+                  block
+                  large
+                  class="dialog-btn"
+                  :disabled="!actionsData.allowReturns"
+                  @click="open_returns"
+                  style="margin: 1px;"
+                >
+                  {{ __("Return") }}
+                </v-btn>
+              </v-col>
+              <v-col cols="6">
+                <v-btn
+                  block
+                  large
+                  class="dialog-btn"
+                  @click="new_invoice"
+                  style="margin: 1px;"
+                >
+                  {{ __("Save/New") }}
+                </v-btn>
+              </v-col>
+            </v-row>
+          <!-- </v-container> -->
         </v-card-text>
-        <!-- زر إغلاق النافذة -->
+        <!-- زر الإغلاق -->
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="actionMenuVisible = false">
+          <v-btn text color="primary" @click="actionDialogVisible = false">
             {{ __("Close") }}
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </v-col>
   </v-row>
         </v-col>
@@ -1077,7 +1048,15 @@ export default {
   mixins: [format],
   data() {
     return {
-      actionMenuVisible: false, // تحكم بظهور القائمة المنسدلة
+      // Fatma
+      actionDialogVisible: false,
+      actionsData: {
+        allowSelectSalesOrder: true, 
+        allowReturns: true, 
+      },
+      actionMenuVisible: false, 
+      // Fatma
+
 
       pos_profile: "",
       pos_opening_shift: "",
@@ -1124,11 +1103,6 @@ export default {
         { title: __("Edit Quantity"), key: "edit_quantity", align: "center" },
         { title: __("Delete"), key: "delete", align: "center" },
       ],
-      actionMenuVisible: false, // تحكم في ظهور وإخفاء الـ Popup
-      pos_profile: {
-        custom_allow_select_sales_order: 1, // إعدادات محاكاة
-        posa_allow_return: true,
-        posa_allow_print_draft_invoices: true,
     };
   },
 
@@ -1418,6 +1392,8 @@ export default {
           }
         });
       }
+
+      this.actionDialogVisible = false;
       return old_invoice;
     },
 
@@ -1927,6 +1903,7 @@ export default {
           }
         },
       });
+      this.actionDialogVisible = false;
     },
 
     get_draft_orders() {
@@ -1944,10 +1921,12 @@ export default {
           }
         },
       });
+      this.actionDialogVisible = false;
     },
 
     open_returns() {
       evntBus.emit("open_returns", this.pos_profile.company);
+      this.actionDialogVisible = false;
     },
 
     close_payments() {
@@ -3291,4 +3270,51 @@ export default {
 .disable-events {
   pointer-events: none;
 }
+.dialog-btn {
+  font-size: 15px; 
+  color: #000; 
+  /* background-color: #e0e0e0;  */
+  background-color: #F4F4F4; 
+  border-radius: 8px; 
+  padding: 50px 70px;
+  box-shadow: none;
+  margin: 1px;
+  /* transition: background-color 0.3s;  */
+  /* width: 200px;  */
+}
+
+.dialog-btn:hover {
+  background-color: #D9DADE; 
+  color:#000;
+  box-shadow: none;
+}
+
+.dialog-btn:disabled {
+  background-color: #999; /* لون عند التعطيل */
+  color: #000; /* لون النص عند التعطيل */
+}
+.btn-hover {
+    transition: background-color 0.3s ease;
+  }
+
+  /* .btn-hover:hover {
+    background-color: #e0e0e0 !important; 
+    color: #1976D2 !important;
+  }
+  .btn-no-active:hover {
+    background-color: #e0e0e0 !important; 
+  }
+
+  .btn-no-active:active {
+    background-color: #e0e0e0 !important; 
+  } */
+
+  .v-card-text{
+    padding: 0;
+  }
+
+  .v-col, .v-col-6 {
+    padding: 3px;
+  }
+
 </style>
