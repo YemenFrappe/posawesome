@@ -11,10 +11,10 @@
     <v-row v-show="!dialog">
       <v-col
         v-show="!payment && !offers && !coupons"
-        xl="7"
-        lg="7"
-        md="7"
-        sm="7"
+        xl="6"
+        lg="6"
+        md="6"
+        sm="6"
         cols="12"
         class="pos pr-0"
       >
@@ -22,10 +22,10 @@
       </v-col>
       <v-col
         v-show="offers"
-        xl="7"
-        lg="7"
-        md="7"
-        sm="7"
+        xl="6"
+        lg="6"
+        md="6"
+        sm="6"
         cols="12"
         class="pos pr-0"
       >
@@ -33,10 +33,10 @@
       </v-col>
       <v-col
         v-show="coupons"
-        xl="7"
-        lg="7"
-        md="7"
-        sm="7"
+        xl="6"
+        lg="6"
+        md="6"
+        sm="6"
         cols="12"
         class="pos pr-0"
       >
@@ -44,17 +44,17 @@
       </v-col>
       <v-col
         v-show="payment"
-        xl="7"
-        lg="7"
-        md="7"
-        sm="7"
+        xl="6"
+        lg="6"
+        md="6"
+        sm="6"
         cols="12"
         class="pos pr-0"
       >
         <Payments></Payments>
       </v-col>
 
-      <v-col xl="5" lg="5" md="5" sm="5" cols="12" class="pos">
+      <v-col xl="6" lg="6" md="6" sm="6" cols="12" class="pos">
         <Invoice></Invoice>
       </v-col>
     </v-row>
@@ -86,6 +86,7 @@ export default {
       payment: false,
       offers: false,
       coupons: false,
+      customers: [],
     };
   },
 
@@ -109,32 +110,32 @@ export default {
   methods: {
   // handleKeydown: function (event) {
   // },
-    handleKeyUp() {
-        // الحصول على العنصر النشط حاليًا
-        const activeElement = document.activeElement;
+    // handleKeyUp() {
+    //     // الحصول على العنصر النشط حاليًا
+    //     const activeElement = document.activeElement;
 
-        // التحقق إذا كان العنصر النشط هو حقل إدخال (input, textarea, أو contenteditable)
-        const isInput =
-          activeElement.tagName === "INPUT" ||
-          activeElement.tagName === "TEXTAREA" ||
-          activeElement.isContentEditable;
+    //     // التحقق إذا كان العنصر النشط هو حقل إدخال (input, textarea, أو contenteditable)
+    //     const isInput =
+    //       activeElement.tagName === "INPUT" ||
+    //       activeElement.tagName === "TEXTAREA" ||
+    //       activeElement.isContentEditable;
 
-        if (isInput) {
-          return;
-        }
+    //     if (isInput) {
+    //       return;
+    //     }
 
-        const itemsSelector = this.$refs.itemsSelector;
-        if (itemsSelector) {
-          const debounceSearchInput = itemsSelector.$refs.debounce_search;
-          if (debounceSearchInput) {
-            debounceSearchInput.focus();
-          } else {
-            console.error("العنصر debounce_search غير موجود داخل ItemsSelector.");
-          }
-        } else {
-          console.error("المكون ItemsSelector غير موجود.");
-        }
-      },
+    //     const itemsSelector = this.$refs.itemsSelector;
+    //     if (itemsSelector) {
+    //       const debounceSearchInput = itemsSelector.$refs.debounce_search;
+    //       if (debounceSearchInput) {
+    //         debounceSearchInput.focus();
+    //       } else {
+    //         console.error("العنصر debounce_search غير موجود داخل ItemsSelector.");
+    //       }
+    //     } else {
+    //       console.error("المكون ItemsSelector غير موجود.");
+    //     }
+    // },
     check_opening_entry() {
       return frappe
         .call('posawesome.posawesome.api.posapp.check_opening_shift', {
@@ -212,7 +213,7 @@ export default {
   },
 
   mounted: function () {
-    window.addEventListener('keyup', this.handleKeyUp);
+    // window.addEventListener('keyup', this.handleKeyUp);
     this.$nextTick(function () {
       this.check_opening_entry();
       this.get_pos_setting();
@@ -249,16 +250,165 @@ export default {
       });
     });
   },
-  beforeDestroy() {
-    window.removeEventListener('keyup', this.handleKeyUp);
-    evntBus.$off('close_opening_dialog');
-    evntBus.$off('register_pos_data');
-    evntBus.$off('LoadPosProfile');
-    evntBus.$off('show_offers');
-    evntBus.$off('show_coupons');
-    evntBus.$off('open_closing_dialog');
-    evntBus.$off('submit_closing_pos');
-  },
+
+
+
+  // mounted: function () {
+  //   this.$nextTick(function () {
+  //       // استعادة POS Profile إذا كان مخزنًا مسبقًا
+  //       const savedPosProfile = JSON.parse(localStorage.getItem('posProfile'));
+  //       if (savedPosProfile) {
+  //           this.pos_profile = savedPosProfile;
+  //           this.get_offers(savedPosProfile.name);
+  //           console.info('POS Profile restored from localStorage.');
+  //       } else {
+  //           this.check_opening_entry(); // إذا لم يكن هناك POS Profile، قم بفتح Dialog
+  //       }
+
+  //       this.get_pos_setting();
+
+  //       console.info('Opening Shift Data:', this.pos_opening_shift);
+
+  //       if (!this.pos_opening_shift) {
+  //           console.error('Opening Shift is missing!');
+  //       }
+
+  //       // باقي الأحداث
+  //       evntBus.on('close_opening_dialog', () => {
+  //           this.dialog = false;
+  //       });
+
+  //       evntBus.on('register_pos_data', (data) => {
+  //           this.pos_profile = data.pos_profile;
+  //           this.get_offers(this.pos_profile.name);
+  //           this.pos_opening_shift = data.pos_opening_shift;
+
+  //           // تخزين POS Profile في localStorage
+  //           localStorage.setItem('posProfile', JSON.stringify(data.pos_profile));
+
+  //           evntBus.emit('register_pos_profile', data);
+  //           console.info('POS Profile saved to localStorage.');
+  //       });
+
+  //       evntBus.on('show_payment', (data) => {
+  //           this.payment = data === 'true';
+  //           this.offers = false;
+  //           this.coupons = false;
+  //       });
+
+  //       evntBus.on('show_offers', (data) => {
+  //           this.offers = data === 'true';
+  //           this.payment = false;
+  //           this.coupons = false;
+  //       });
+
+  //       evntBus.on('show_coupons', (data) => {
+  //           this.coupons = data === 'true';
+  //           this.offers = false;
+  //           this.payment = false;
+  //       });
+
+  //       evntBus.on('open_closing_dialog', () => {
+  //           this.get_closing_data();
+  //       });
+
+  //       evntBus.on('submit_closing_pos', (data) => {
+  //           this.submit_closing_pos(data);
+
+  //           // مسح بيانات POS Profile من localStorage عند الإغلاق
+  //           localStorage.removeItem('posProfile');
+  //           console.info('POS Profile removed from localStorage.');
+  //       });
+
+  //       this.check_opening_entry();
+  //       this.get_pos_setting();
+  //   });
+  // },
+
+
+
+  // mounted: function () {
+  //   this.$nextTick(function () {
+  //       this.check_opening_entry();
+  //       this.get_pos_setting();
+
+  //       // عند تحميل الصفحة، التحقق إذا كان هناك بيانات عملاء محفوظة مسبقًا
+  //       const savedCustomers = JSON.parse(sessionStorage.getItem('customers'));
+  //       if (savedCustomers) {
+  //           this.customers = savedCustomers; // إعادة تحميل العملاء المحفوظين
+  //       }
+
+  //       evntBus.on('close_opening_dialog', () => {
+  //           this.dialog = false;
+  //       });
+
+  //       evntBus.on('register_pos_data', (data) => {
+  //           this.pos_profile = data.pos_profile;
+  //           this.get_offers(this.pos_profile.name);
+  //           this.pos_opening_shift = data.pos_opening_shift;
+
+  //           evntBus.emit('register_pos_profile', data);
+  //           console.info('LoadPosProfile');
+  //       });
+
+  //       evntBus.on('show_payment', (data) => {
+  //           // حفظ العملاء في sessionStorage قبل الانتقال
+  //           sessionStorage.setItem('customers', JSON.stringify(this.customers));
+
+  //           this.payment = data === 'true';
+  //           this.offers = false;
+  //           this.coupons = false;
+  //       });
+
+  //       evntBus.on('show_offers', (data) => {
+  //           this.offers = data === 'true';
+  //           this.payment = false;
+  //           this.coupons = false;
+  //       });
+
+  //       evntBus.on('show_coupons', (data) => {
+  //           this.coupons = data === 'true';
+  //           this.offers = false;
+  //           this.payment = false;
+  //       });
+
+  //       evntBus.on('open_closing_dialog', () => {
+  //           this.get_closing_data();
+  //       });
+
+  //       evntBus.on('submit_closing_pos', (data) => {
+  //           this.submit_closing_pos(data);
+  //       });
+  //   });
+  // },
+
+  
+  // beforeDestroy() {
+  //   // window.removeEventListener('keyup', this.handleKeyUp);
+  //   evntBus.off('close_opening_dialog');
+  //   evntBus.off('register_pos_data');
+  //   evntBus.off('LoadPosProfile');
+  //   evntBus.off('show_offers');
+  //   evntBus.off('show_coupons');
+  //   evntBus.off('open_closing_dialog');
+  //   evntBus.off('submit_closing_pos');
+  //   if (window.onScan) {
+  //       window.onScan.detachFrom(document);
+  //   }
+  // },
+
+  beforeUnmount() {
+    evntBus.off('register_pos_data');
+    evntBus.off('show_payment');
+    evntBus.off('show_offers');
+    evntBus.off('show_coupons');
+    evntBus.off('open_closing_dialog');
+    evntBus.off('submit_closing_pos');
+
+    if (window.onScan) {
+        window.onScan.detachFrom(document);
+    }
+  }
 };
 </script>
 

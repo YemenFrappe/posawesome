@@ -3,35 +3,35 @@
     <v-row>
       <v-col cols="3">
         <v-row dense>
-            <v-col
-              v-for="(item, index) in items_group"
-              :key="index"
-              cols="auto"
+          <v-col
+            v-for="(item, index) in items_group"
+            :key="index"
+            cols="12"
+          >
+            <v-btn
+              :class="{'black-btn': item_group === item}"
+              outlined
+              @click="handleGroupChange(item)"
+              class="custom-btn"
+              style="width: 200px; height: 50px; margin: 13px 0 0 0"
             >
-              <v-btn
+              {{ item }}
+            </v-btn>
+          </v-col>
 
-                :color="item_group === item ? 'primary' : 'default'" 
-                outlined
-                @click="handleGroupChange(item)" 
-                style="width: 200px; height:40px ; margin-top:20px"
-              >
-                {{ item }}
-              </v-btn>
-            </v-col>
           </v-row>
-
       </v-col>
       <v-col cols="9">
         <v-card
           class="selection mx-auto grey lighten-5 mt-3"
-          style="max-height: 75vh; height: 75vh"
+          style="max-height: 84vh; height: 84vh;"
         >
           <v-progress-linear
             :active="loading"
             :indeterminate="loading"
             absolute
             top
-            color="info"
+            color="black"
           ></v-progress-linear>
           <v-row class="items px-2 py-1">
             <v-col class="mb-4">
@@ -149,9 +149,8 @@
             <!-- Start Items Section -->
 
           </v-row>
+
         </v-card>
-
-
 
 
         <v-card class="cards mb-0 mt-3 pa-2 grey lighten-5">
@@ -159,29 +158,48 @@
             <v-col cols="4" class="mt-1">
               <v-btn-toggle
                 v-model="items_view"
-                color="primary"
+                color="black"
                 group
                 dense
                 rounded
               >
-                <v-btn small value="list">{{ __("List") }}</v-btn>
-                <v-btn small value="card">{{ __("Card") }}</v-btn>
+                <v-btn small value="list"
+                class="custom-btn"
+                >{{ __("List") }}</v-btn>
+                <v-btn small value="card"
+                class="custom-btn"
+                >{{ __("Card") }}</v-btn>
               </v-btn-toggle>
             </v-col>
             <v-col cols="4" class="mt-1">
               <!-- <v-btn class="pl-0 pr-0" small block color="primary" text @click="show_coupons" -->
-              <v-btn small style="height: 46px;" color="primary" @click="show_coupons"
+              <v-btn small style="height: 46px;"  @click="show_coupons"
+               class="custom-btn"
                 >{{ couponsCount }} {{ __("Coupons") }}</v-btn
               >
             </v-col>
-            <v-col cols="4" class="mt-1">
-              <!-- <v-btn small block color="primary" text @click="show_offers" -->
+            <!-- <v-col cols="4" class="mt-1">
+              ## <v-btn small block color="primary" text @click="show_offers" 
               <v-btn small style="height: 46px;" color="primary" @click="show_offers"
                 >{{ offersCount }} {{ __("Offers") }} : {{ appliedOffersCount }}
                 {{ __("Applied") }}</v-btn
               >
-            </v-col>
+            </v-col> -->
+              <v-col cols="4" class="mt-1">
+                <v-btn
+                  small
+                  block
+                  class="custom-btn"
+                  style="height: 46px; "
+                  @click="show_offers"
+                >
+                  {{ offersCount }} {{ __("Offers") }} : {{ appliedOffersCount }}
+                  {{ __("Applied") }}
+                </v-btn>
+              </v-col>
+
           </v-row>
+
         </v-card>
       </v-col>
     </v-row>
@@ -234,10 +252,43 @@ export default {
   },
 
   methods: {
-    handleGroupChange(item) {
+
+    
+  handleGroupChange(item) {
     this.item_group = item; // تحديث العنصر المحدد
     this.search_onchange(); // استدعاء دالة التصفية
   },
+  
+
+//     loadItems() {
+//   const vm = this;
+
+//   frappe.call({
+//     method: "posawesome.posawesome.api.posapp.get_items",
+//     args: {
+//       item_group: this.item_group, // يتم تمرير القيمة null عند اختيار "ALL"
+//     },
+//     callback: function (r) {
+//       if (r.message) {
+//         vm.items = r.message; // تحديث قائمة المنتجات
+//       }
+//     },
+//   });
+// },
+
+
+//   handleGroupChange(item) {
+//   if (item === "ALL") {
+//     this.item_group = null; // إزالة أي فلترة على المنتجات
+//   } else {
+//     this.item_group = item; // تصفية المنتجات بناءً على المجموعة
+//   }
+
+//   // إعادة تحميل المنتجات بناءً على المجموعة المختارة
+//   this.loadItems();
+// },
+
+
     
     show_offers() {
       evntBus.emit("show_offers", "true");
@@ -306,15 +357,48 @@ export default {
         },
       });
     },
+
+
+    // get_items_groups() {
+    //   if (!this.pos_profile) {
+    //     console.log("No POS Profile");
+    //     return;
+    //   }
+    //   if (this.pos_profile.item_groups.length > 0) {
+    //     this.pos_profile.item_groups.forEach((element) => {
+    //       if (element.item_group !== "All Item Groups") {
+    //         this.items_group.push(element.item_group);
+    //       }
+    //     });
+    //   } else {
+    //     const vm = this;
+    //     frappe.call({
+    //       method: "posawesome.posawesome.api.posapp.get_items_groups",
+    //       args: {},
+    //       callback: function (r) {
+    //         if (r.message) {
+    //           r.message.forEach((element) => {
+    //             vm.items_group.push(element.name);
+    //           });
+    //         }
+    //       },
+    //     });
+    //   }
+    // },
+
     get_items_groups() {
       if (!this.pos_profile) {
         console.log("No POS Profile");
         return;
       }
+
+      // استخدم Set لمنع التكرار
+      const uniqueGroups = new Set();
+
       if (this.pos_profile.item_groups.length > 0) {
         this.pos_profile.item_groups.forEach((element) => {
           if (element.item_group !== "All Item Groups") {
-            this.items_group.push(element.item_group);
+            uniqueGroups.add(element.item_group);
           }
         });
       } else {
@@ -325,13 +409,23 @@ export default {
           callback: function (r) {
             if (r.message) {
               r.message.forEach((element) => {
-                vm.items_group.push(element.name);
+                uniqueGroups.add(element.name);
               });
             }
+            // تحويل Set إلى Array وتحديث items_group
+            vm.items_group = ["ALL", ...Array.from(uniqueGroups)]; // إضافة "ALL" كأول عنصر
           },
         });
+        return;
       }
+
+      // تحديث items_group بعد إزالة التكرارات وإضافة "ALL"
+      this.items_group = ["ALL", ...Array.from(uniqueGroups)];
     },
+
+
+
+
     getItmesHeaders() {
       const items_headers = [
         {
@@ -712,6 +806,10 @@ export default {
   mounted() {
     this.scan_barcoud();
   },
+
+  // onMounted() {
+  //   this.scan_barcoud();
+  // },
 };
 </script>
 
@@ -736,4 +834,24 @@ export default {
   /* padding-bottom: 5px !important; */
   /* padding-top: 0; */
 /* } */
+.custom-btn {
+    background-color: #F4F4F4;
+    color:#000;
+    box-shadow: none;
+    /* transition: background-color 0.3s ease; تأثير التحويل */
+  }
+
+  .custom-btn:hover {
+    background-color: #D9DADE; 
+    color:#000;
+    box-shadow: none;
+  }
+
+  .custom-btn:active {
+    background-color: black !important; /* لون أسود عند الضغط */
+  }
+  .black-btn {
+    background-color: black !important; /* حفظ اللون الأسود بعد الضغط */
+    color: white !important; /* لتغيير لون النص إلى الأبيض عندما يكون الزر أسود */
+  }
 </style>

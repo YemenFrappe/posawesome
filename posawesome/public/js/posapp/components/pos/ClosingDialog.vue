@@ -69,6 +69,7 @@
   </v-row>
 </template>
 
+
 <script>
 import { ref, onMounted } from 'vue';
 import { evntBus } from '../../bus';

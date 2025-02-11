@@ -1,40 +1,54 @@
 <template>
   <nav>
     <v-app-bar app height="40" class="elevation-2">
-      <v-app-bar-nav-icon
+      <!-- <v-app-bar-nav-icon
         @click.stop="drawer = !drawer"
         class="grey--text"
-      ></v-app-bar-nav-icon>
-      <v-img
+      ></v-app-bar-nav-icon> -->
+      <!-- <v-img
         src="/assets/posawesome/js/posapp/components/pos/pos.png"
         alt="POS Awesome"
         max-width="32"
         class="mr-2"
         color="primary"
-      ></v-img>
+      ></v-img> -->
+
       <!-- <Payments></Payments> -->
-      <v-toolbar-title
+      <!-- <v-toolbar-title
         @click="go_desk"
         style="cursor: pointer"
         class="text-uppercase primary--text"
       >
         <span class="font-weight-light">pos</span>
-        <span>awesome</span>
-      </v-toolbar-title>
+        <span>awesome Fadi</span>
+      </v-toolbar-title> -->
+
+      <v-list-item
+        v-for="listItem in items"
+        :key="listItem.text"
+        @click="changePage(listItem.text)"
+      >
+        <v-icon style="font-size: 30px; margin-left: 20px; margin-right: 20px; padding: 0;" color="black" :title="listItem.text">{{ listItem.icon }}</v-icon>
+      </v-list-item>
+
+
 
       <v-spacer></v-spacer>
-      <v-btn style="cursor: unset" variant="text" color="primary">
+      <v-btn style="cursor: unset" variant="text" color="black">
         <span right>{{ pos_profile.name }}</span>
       </v-btn>
       <div class="text-center">
         <v-menu offset="y">
           <template v-slot:activator="{ props }">
-            <v-btn color="primary" dark variant="text" v-bind="props">
+            <v-btn color="black" dark variant="text" v-bind="props">
               Menu
             </v-btn>
           </template>
           <v-card class="mx-auto" max-width="300" tile>
             <v-list density="compact" v-model="menu_item">
+
+
+              
               <v-list-item
                 @click="close_shift_dialog"
                 v-if="!pos_profile.posa_hide_closing_shift && menu_item == 0"
@@ -42,6 +56,9 @@
                 <v-icon class="mr-2">mdi-content-save-move-outline</v-icon>
                 <span>{{ __('Close Shift') }}</span>
               </v-list-item>
+
+
+
               <v-list-item
                 @click="print_last_invoice"
                 v-if="pos_profile.posa_allow_print_last_invoice && this.last_invoice"
@@ -63,14 +80,14 @@
         </v-menu>
       </div>
     </v-app-bar>
-    <v-navigation-drawer
+    <!-- <v-navigation-drawer
       v-model="drawer"
       :mini-variant.sync="mini"
       app
       class="primary margen-top"
       width="170"
     >
-      <v-list>
+      <v-list> -->
         <!-- <v-list-item class="px-2">
           <v-avatar>
             <v-img :src="company_img"></v-img>
@@ -80,7 +97,7 @@
             <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
         </v-list-item> -->
-        <v-list v-model="item">
+        <!-- <v-list v-model="item">
           <v-list-item
             v-for="(listItem, index) in items"
             :key="listItem.text"
@@ -91,7 +108,7 @@
           </v-list-item>
         </v-list>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
     <v-snackbar v-model="snack" :timeout="5000" :color="snackColor" top right>
       {{ snackText }}
     </v-snackbar>
@@ -136,7 +153,18 @@ export default {
   methods: {
     changePage(key) {
       this.$emit('changePage', key);
+      // evntBus.emit('changePage', key);
     },
+
+    // changePage(key) {
+    //   this.$emit('changePage', key);
+    //   if (key === 'POS') {
+    //       this.$nextTick(() => {
+    //           location.reload();
+    //       });
+    //   }
+    // },
+
     go_desk() {
       frappe.set_route('/');
       location.reload();
