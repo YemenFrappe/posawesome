@@ -806,6 +806,10 @@ export default {
   mounted() {
     this.scan_barcoud();
   },
+
+  // onMounted() {
+  //   this.scan_barcoud();
+  // },
 };
 </script>
 

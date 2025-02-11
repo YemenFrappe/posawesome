@@ -163,7 +163,18 @@ export default {
         textFour.indexOf(searchText) > -1 ||
         textFifth.indexOf(searchText) > -1
       );
+    },
+
+    loadCustomersFromStorage() {
+        const customers = JSON.parse(localStorage.getItem("customer_storage"));
+        if (customers) {
+            this.customers = customers; // افترض أن `customers` هو اسم المتغير المستخدم في المكون.
+        }
     }
+  },
+
+  mounted() {
+    this.loadCustomersFromStorage();
   },
 
   computed: {},

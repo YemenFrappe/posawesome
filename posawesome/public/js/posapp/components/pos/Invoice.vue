@@ -1040,6 +1040,7 @@
 </template>
 
 <script>
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { evntBus } from "../../bus";
 import format from "../../format";
 import Customer from "./Customer.vue";
@@ -1064,6 +1065,7 @@ export default {
       invoice_doc: "",
       return_doc: "",
       customer: "",
+      // customers: [],
       customer_info: "",
       discount_amount: 0,
       additional_discount_percentage: 0,
@@ -3116,9 +3118,17 @@ export default {
         this.delivery_charges_rate = 0;
       }
     },
+
+    // loadCustomersFromStorage() {
+    //     const customers = JSON.parse(localStorage.getItem("customer_storage"));
+    //     if (customers) {
+    //         this.customers = customers; // افترض أن `customers` هو اسم المتغير المستخدم في المكون.
+    //     }
+    // }
   },
 
   mounted() {
+    // this.loadCustomersFromStorage();
     evntBus.on("register_pos_profile", (data) => {
       this.pos_profile = data.pos_profile;
       this.customer = data.pos_profile.customer;
@@ -3188,16 +3198,18 @@ export default {
       this.new_line = data;
     });
   },
+
+  
   beforeDestroy() {
-    evntBus.$off("register_pos_profile");
-    evntBus.$off("add_item");
-    evntBus.$off("update_customer");
-    evntBus.$off("fetch_customer_details");
-    evntBus.$off("new_invoice");
-    evntBus.$off("set_offers");
-    evntBus.$off("update_invoice_offers");
-    evntBus.$off("update_invoice_coupons");
-    evntBus.$off("set_all_items");
+    evntBus.off("register_pos_profile");
+    evntBus.off("add_item");
+    evntBus.off("update_customer");
+    evntBus.off("fetch_customer_details");
+    evntBus.off("new_invoice");
+    evntBus.off("set_offers");
+    evntBus.off("update_invoice_offers");
+    evntBus.off("update_invoice_coupons");
+    evntBus.off("set_all_items");
   },
   created() {
     document.addEventListener("keydown", this.shortOpenPayment.bind(this));
@@ -3273,14 +3285,11 @@ export default {
 .dialog-btn {
   font-size: 15px; 
   color: #000; 
-  /* background-color: #e0e0e0;  */
   background-color: #F4F4F4; 
   border-radius: 8px; 
   padding: 50px 70px;
   box-shadow: none;
   margin: 1px;
-  /* transition: background-color 0.3s;  */
-  /* width: 200px;  */
 }
 
 .dialog-btn:hover {
@@ -3290,24 +3299,12 @@ export default {
 }
 
 .dialog-btn:disabled {
-  background-color: #999; /* لون عند التعطيل */
-  color: #000; /* لون النص عند التعطيل */
+  background-color: #999;
+  color: #000;
 }
 .btn-hover {
     transition: background-color 0.3s ease;
   }
-
-  /* .btn-hover:hover {
-    background-color: #e0e0e0 !important; 
-    color: #1976D2 !important;
-  }
-  .btn-no-active:hover {
-    background-color: #e0e0e0 !important; 
-  }
-
-  .btn-no-active:active {
-    background-color: #e0e0e0 !important; 
-  } */
 
   .v-card-text{
     padding: 0;

@@ -24,14 +24,11 @@
       </v-toolbar-title> -->
 
       <v-list-item
-        v-for="(listItem, index) in items"
+        v-for="listItem in items"
         :key="listItem.text"
         @click="changePage(listItem.text)"
       >
-      <v-icon style="font-size: 30px; margin-left: 20px; margin-right: 20px; padding: 0;" color="black" :title="listItem.text">{{ listItem.icon }}</v-icon>
-
-        <!-- <v-icon class="mr-2">{{ listItem.icon }}</v-icon> -->
-        <!-- <span class="mr-2">{{ listItem.text }}</span> -->
+        <v-icon style="font-size: 30px; margin-left: 20px; margin-right: 20px; padding: 0;" color="black" :title="listItem.text">{{ listItem.icon }}</v-icon>
       </v-list-item>
 
 
@@ -49,6 +46,9 @@
           </template>
           <v-card class="mx-auto" max-width="300" tile>
             <v-list density="compact" v-model="menu_item">
+
+
+              
               <v-list-item
                 @click="close_shift_dialog"
                 v-if="!pos_profile.posa_hide_closing_shift && menu_item == 0"
@@ -56,6 +56,9 @@
                 <v-icon class="mr-2">mdi-content-save-move-outline</v-icon>
                 <span>{{ __('Close Shift') }}</span>
               </v-list-item>
+
+
+
               <v-list-item
                 @click="print_last_invoice"
                 v-if="pos_profile.posa_allow_print_last_invoice && this.last_invoice"
@@ -150,7 +153,18 @@ export default {
   methods: {
     changePage(key) {
       this.$emit('changePage', key);
+      // evntBus.emit('changePage', key);
     },
+
+    // changePage(key) {
+    //   this.$emit('changePage', key);
+    //   if (key === 'POS') {
+    //       this.$nextTick(() => {
+    //           location.reload();
+    //       });
+    //   }
+    // },
+
     go_desk() {
       frappe.set_route('/');
       location.reload();

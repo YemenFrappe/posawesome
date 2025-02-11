@@ -58,7 +58,8 @@
             <v-data-table
               :headers="invoices_headers"
               :items="outstanding_invoices"
-              item-key="name"
+              item-value="name"
+              return-object
               class="elevation-1 mt-0"
               show-select
               v-model="selected_invoices"
@@ -77,6 +78,7 @@
                 >
               </template>
             </v-data-table>
+
             <v-divider></v-divider>
           </div>
           <div
@@ -109,7 +111,8 @@
             <v-data-table
               :headers="unallocated_payments_headers"
               :items="unallocated_payments"
-              item-key="name"
+              item-value="name"
+              return-object
               class="elevation-1 mt-0"
               :single-select="singleSelect"
               show-select
@@ -188,7 +191,8 @@
             <v-data-table
               :headers="mpesa_payment_headers"
               :items="mpesa_payments"
-              item-key="name"
+              item-value="name"
+              return-object
               class="elevation-1 mt-0"
               :single-select="singleSelect"
               show-select
@@ -291,7 +295,7 @@
                     color="primary"
                     background-color="white"
                     hide-details
-                    :value="formtCurrency(method.amount)"
+                    :model-value="formtCurrency(method.amount)"
                     @change="
                       setFormatedCurrency(method, 'amount', null, true, $event)
                     "
@@ -414,6 +418,48 @@ export default {
           value: "outstanding_amount",
         },
       ],
+
+
+      // invoices_headers: [
+      //   {
+      //     text: __("Invoice"),
+      //     align: "start",
+      //     sortable: true,
+      //     value: "name",
+      //   },
+      //   {
+      //     text: __("Customer"),
+      //     align: "start",
+      //     sortable: true,
+      //     value: "customer_name",
+      //   },
+      //   {
+      //     text: __("Date"),
+      //     align: "start",
+      //     sortable: true,
+      //     value: "posting_date",
+      //   },
+      //   {
+      //     text: __("Due Date"),
+      //     align: "start",
+      //     sortable: true,
+      //     value: "due_date",
+      //   },
+      //   {
+      //     text: __("Total"),
+      //     align: "end",
+      //     sortable: true,
+      //     value: "grand_total",
+      //   },
+      //   {
+      //     text: __("Outstanding"),
+      //     align: "end",
+      //     sortable: true,
+      //     value: "outstanding_amount",
+      //   },
+      // ],
+
+
       unallocated_payments_headers: [
         {
           title: __("Payment ID"),
@@ -572,14 +618,13 @@ export default {
         });
       }
     },
+
     onInvoiceSelected(event) {
       evntBus.emit("set_customer", event.item.customer);
     },
+
+
     get_outstanding_invoices() {
-      // console.log("customer_name" , this.customer_name);
-      // console.log("customer_name" , this.customer_name);
-      console.log("customer_name" , this.customer_name);
-      console.log("customer_name" , this.customer_info);
       this.invoices_loading = true;
       return frappe
         .call(
@@ -760,12 +805,14 @@ export default {
         0
       );
     },
+
     total_selected_invoices() {
       return this.selected_invoices.reduce(
         (acc, cur) => acc + flt(cur.outstanding_amount),
         0
       );
     },
+
     total_selected_payments() {
       return this.selected_payments.reduce(
         (acc, cur) => acc + flt(cur.unallocated_amount),
@@ -811,8 +858,8 @@ export default {
     });
   },
   beforeDestroy() {
-    evntBus.$off("update_customer");
-    evntBus.$off("fetch_customer_details");
+    evntBus.off("update_customer");
+    evntBus.off("fetch_customer_details");
   },
 };
 </script>

@@ -176,7 +176,7 @@ export default {
     });
   },
   beforeDestroy() {
-    evntBus.$off('open_mpesa_payments');
+    evntBus.off('open_mpesa_payments');
   },
 };
 </script>
